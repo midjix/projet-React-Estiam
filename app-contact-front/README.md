@@ -1,3 +1,14 @@
+# Application de gestion de contacte 
+
+## Fonctionnalitée 
+- ajout de contacte
+- suppression de contacte
+- modification de contacte
+- affichage des contacte
+
+
+
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
