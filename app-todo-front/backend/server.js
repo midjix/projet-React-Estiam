@@ -72,7 +72,7 @@ app.put('/taches/:id', requireAuth, (req, res) => {
     const id = parseInt(req.params.id);
     const index = taches.findIndex(tache => tache.id === id);
     if (index !== -1) {
-        taches[index] = { id, ...req.body };
+        taches[index].termine = !taches[index].termine;
         res.json(taches[index]);
     } else {
         res.status(404).json({ error: 'Tache non trouvée' });

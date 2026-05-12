@@ -7,7 +7,6 @@ import { api } from "../lib/api";
 function HomePage() {
     const { user, logout } = useAuth();
     const [taches, setTaches] = useState([]);
-    const [texte, setTexte] = useState('');
 
     useEffect(() => {
         chargerTaches();
@@ -18,16 +17,13 @@ function HomePage() {
         setTaches(taches);
     };
 
-    const ajouterTache = async () => {
-        if (texte.trim()) {
-            const newTache = await api.post('/taches', { texte });
-            setTaches([...taches, newTache]);
-            setTexte('');
-        }
+    const ajouterTache = async (texte) => {
+        const newTache = await api.post('/taches', { texte: texte, termine: false });
+        setTaches([...taches, newTache]);
     };
 
     const toggleTache = async (id, termine) => {
-        const updatedTache = await api.put(`/taches/${id}`, { termine });
+        const updatedTache = await api.put(`/taches/${id}`, { body: { termine } });
         setTaches(taches.map(tache => tache.id === id ? updatedTache : tache));
     };
 
@@ -40,7 +36,7 @@ function HomePage() {
         <div>
             <h1>HomePage</h1>
             <button onClick={logout}>Logout</button>
-            <Todoform listTaches={taches} setListTaches={setTaches} ajouterTache={ajouterTache}/>
+            <Todoform ajouterTache={ajouterTache}/>
             <TodoList taches={taches} toggleTache={toggleTache} supprimerTache={supprimerTache} />
         </div>
     );

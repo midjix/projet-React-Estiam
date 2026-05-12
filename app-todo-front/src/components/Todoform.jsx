@@ -5,13 +5,16 @@ import { useState } from "react";
 
 
 function Todoform({ ajouterTache }) {
-    const [tache, setTache] = useState("");
+    const [tache, setTache] = useState({
+        termine : false,
+        texte : ""
+    });
     const [isPending, startTransition] = useTransition();
 
     const addTask = () => {
         startTransition(() => {
-            ajouterTache(tache);
-            setTache("");
+            ajouterTache(tache.texte);
+            setTache({termine: false, texte: ""});
         });
     };
 
@@ -24,8 +27,8 @@ function Todoform({ ajouterTache }) {
                         <input
                         type="text"
                         placeholder="Ajouter une tâche"
-                        value={tache}
-                        onChange={(e) => setTache(e.target.value)}
+                        value={tache.texte}
+                        onChange={(e) => setTache({termine: false, texte: e.target.value})}
                     />
                     <button onClick={addTask}>
                         {isPending ? "Ajout en cours..." : "Ajouter"}
