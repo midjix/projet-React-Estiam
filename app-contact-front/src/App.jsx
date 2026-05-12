@@ -46,6 +46,7 @@ function App() {
         <a href="/" className='menu'>Home</a>
         <a href="/ajout" className='menu'>Ajouter un contact</a>
         <a href="/login" className='menu'>Login</a>
+        <button onClick = {() => useAuth().logout()}>Logout</button>
       </nav>
       <Routes>
         <Route path="/" element={

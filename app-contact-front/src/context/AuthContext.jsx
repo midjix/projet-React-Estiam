@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
                 setUser({});
             }
         }
-        setLoading(false); 
+        setLoading(false); // pour indiquer que le chargement est terminé
     }, []);
 
     const login = async (email, password) => {
