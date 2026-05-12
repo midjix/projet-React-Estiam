@@ -1,8 +1,8 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+require('dotenv').config(); // pour charger les variables d'environnement depuis le fichier .env
+const express = require('express');// pour créer le serveur Express
+const cors = require('cors');// pour permettre les requêtes cross-origin
+const bcrypt = require('bcryptjs'); // pour hasher les mots de passe et les comparer lors de la connexion
+const jwt = require('jsonwebtoken'); // pour créer et vérifier les tokens JWT pour l'authentification
 const app = express();
 
 app.use(cors());

@@ -4,12 +4,29 @@ import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
 import Todoform from './components/Todoform'
+import ProtectedRoute from './components/ProtectedRoute'
+import Login from './Pages/login'
+import HomePage from './Pages/HomePage'
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
+      <nav>
+        <a href="/" className="nav-link">Home</a>
+        <a href="/login" className="nav-link">Login</a>
+      </nav>
+      <Routes>
+        <Route path="/" element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
@@ -17,8 +34,6 @@ function App() {
           <img src={viteLogo} className="vite" alt="Vite logo" />
         </div>
         <div>
-          <h1>Get started</h1>
-          <Todoform />
           <p>
             Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
           </p>
