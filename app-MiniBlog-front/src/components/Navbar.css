@@ -1,0 +1,30 @@
+nav {
+    padding: 20px;
+    align-items: center;
+}
+
+nav a {
+    margin-right: 10px;
+    text-decoration: none;
+    font-size: 20px;
+    color: violet;
+}
+
+nav a:hover {
+    color: blue;
+}
+
+nav button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    background-color: green;
+    cursor: pointer;
+    font-size: 20px;
+    color: white;
+}
+
+nav button:hover {
+    background-color: darkgreen;
+}   

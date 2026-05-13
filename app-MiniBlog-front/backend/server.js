@@ -34,9 +34,9 @@ function requireAuth(req, res, next) {
      } catch (err) {
          return res.status(403).json({ error: 'invalid or expired token' }); // pour retourner une erreur si le token est invalide
      }
- }
+}
 
- app.post('/login', async (req, res) => {
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     const user = users.find(user => user.email === email); // pour trouver l'utilisateur
     if (!user) return res.status(401).json({ error: 'User not found' }); // pour retourner une erreur si l'utilisateur n'est pas trouvé
@@ -44,9 +44,9 @@ function requireAuth(req, res, next) {
     if (!isPasswordValid) return res.status(401).json({ error: 'Invalid password' }); // pour retourner une erreur si le mot de passe est invalide
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' }); // pour créer le token JWT
     res.json({ token }); // pour retourner le token
- })
+})
 
- app.post('/register', async (req, res) => {
+app.post('/register', async (req, res) => {
     const { email, password } = req.body;
     const user = users.find(user => user.email === email); // pour trouver l'utilisateur
     if (user) return res.status(409).json({ error: 'User already exists' }); // pour retourner une erreur si l'utilisateur existe
@@ -58,9 +58,69 @@ function requireAuth(req, res, next) {
     });
     const token = jwt.sign({ id: users.length, email }, JWT_SECRET, { expiresIn: '1h' }); // pour créer le token JWT
     res.json({ token }); // pour retourner le token
- })
- 
- app.listen(PORT, () => {
+})
+
+let articles = [
+    { id: 1, title: 'Article 1', content: 'Contenu 1', authorEmail: 'admin@test.com' },
+    { id: 2, title: 'Article 2', content: 'Contenu 2', authorEmail: 'admin@test.com' },
+];
+
+let nextId = 3;
+
+app.post('/articles', requireAuth, (req, res) => {
+    const { title, content } = req.body;
+    const article = {
+        id: nextId,
+        title,
+        content,
+        authorEmail: req.user.email,
+    };
+    articles.push(article);
+    lastId++;
+    res.json(article);
+});
+
+app.get('/articles', (req, res) => {
+    const titles = articles.map(article => ({id: article.id, title: article.title})); // pour extraire les titres des articles
+    res.json(titles);
+});
+
+app.get('/articles/author', requireAuth, (req, res) => {
+    const email = req.user.email;
+    const article = articles.find(article => article.authorEmail === email); // pour trouver l'article
+    res.json(article); // pour retourner l'article  
+});
+
+app.get('/articles/:id', (req, res) => {
+    const { id } = req.params;
+    const article = articles.find(article => article.id === parseInt(id)); // pour trouver l'article
+    if (!article) return res.status(404).json({ error: 'Article not found' }); // pour retourner une erreur si l'article n'est pas trouvé
+    res.json(article); // pour retourner l'article  
+});
+
+app.put('/articles/:id', requireAuth, (req, res) => {
+    const { id } = req.params;
+    const { title, content } = req.body;
+    const article = articles.find(article => article.id === parseInt(id)); // pour trouver l'article
+    if (!article) return res.status(404).json({ error: 'Article not found' }); // pour retourner une erreur si l'article n'est pas trouvé
+    if(article.authorEmail !== req.user.email) return res.status(403).json({ error: 'You are not the author of this article' }); // pour retourner une erreur si l'utilisateur n'est pas l'auteur
+    article.title = title;
+    article.content = content;
+    res.json(article); // pour retourner l'article
+});
+
+app.delete('/articles/:id', requireAuth, (req, res) => {
+    const { id } = req.params;
+    const article = articles.find(article => article.id === parseInt(id)); // pour trouver l'article
+    if (!article) return res.status(404).json({ error: 'Article not found' }); // pour retourner une erreur si l'article n'est pas trouvé
+    if(article.authorEmail !== req.user.email) return res.status(403).json({ error: 'You are not the author of this article' }); // pour retourner une erreur si l'utilisateur n'est pas l'auteur
+    articles = articles.filter(article => article.id !== parseInt(id)); // pour supprimer l'article
+    res.json({ message: 'Article deleted' }); // pour retourner un message de confirmation
+});
+
+
+
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
- });
+});
 
