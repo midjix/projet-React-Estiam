@@ -9,6 +9,28 @@ function App() {
 
   return (
     <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/article/:id" element={<ArticleDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/create" element={
+          <ProtectedRoute>
+            <CreateArticle />
+          </ProtectedRoute>
+          } />
+        <Route path="/edit/:id" element={
+          <ProtectedRoute>
+            <UpdateArticle />
+          </ProtectedRoute>
+          } />
+        <Route path="/my-articles" element={
+          <ProtectedRoute>
+            <MyArticle />
+          </ProtectedRoute>
+          } />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
