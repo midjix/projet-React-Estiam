@@ -3,10 +3,12 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+
 function Register() {
-    const { register } = useAuth();
+    const { register, login } = useAuth();
     const navigate = useNavigate();
     const [userExists, setUserExists] = useState(false);
+    
     return (
         <div>
             <h1>Créer un compte</h1>
@@ -20,7 +22,12 @@ function Register() {
                     console.log( error + "L'utilisateur existe déjà ==> page register");
                     return;
                 }
-                navigate('/');
+                try {
+                    await login(email, password);
+                    navigate("/");
+                } catch (error) {
+                    console.log(error);
+                }
             }}>
                 <label htmlFor="email">Email : </label>
                 <input type="email" id="email" name="email" /><br />

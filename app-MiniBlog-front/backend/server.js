@@ -60,9 +60,11 @@ app.post('/register', async (req, res) => {
     res.json({ token }); // pour retourner le token
 })
 
+const date = new Date();
+
 let articles = [
-    { id: 1, title: 'Article 1', content: 'Contenu 1', authorEmail: 'admin@test.com' },
-    { id: 2, title: 'Article 2', content: 'Contenu 2', authorEmail: 'admin@test.com' },
+    { id: 1, title: 'Article 1', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.', date: '2025-01-01', authorEmail: 'admin@test.com' },
+    { id: 2, title: 'Article 2', content: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.', date: '2025-01-02', authorEmail: 'admin@test.com' },
 ];
 
 let nextId = 3;
@@ -73,21 +75,24 @@ app.post('/articles', requireAuth, (req, res) => {
         id: nextId,
         title,
         content,
+        date: date.toISOString().slice(0, 10), // pour formater la date en jj/mm/aaaa en extrayant les 10 premiers caracteres (YYYY-MM-DD)
         authorEmail: req.user.email,
     };
     articles.push(article);
-    lastId++;
+    nextId++;
     res.json(article);
 });
 
 app.get('/articles', (req, res) => {
-    const titles = articles.map(article => ({id: article.id, title: article.title})); // pour extraire les titres des articles
+    const titles = articles.map(article => ({id: article.id, title: article.title, date: article.date, authorEmail: article.authorEmail})); // pour extraire les titres des articles
     res.json(titles);
 });
 
 app.get('/articles/author', requireAuth, (req, res) => {
     const email = req.user.email;
+    console.log(`email : ${email}`);
     const article = articles.find(article => article.authorEmail === email); // pour trouver l'article
+    console.log(`article : ${article.title}`);
     res.json(article); // pour retourner l'article  
 });
 

@@ -37,16 +37,15 @@ export const AuthProvider = ({ children }) => {
     const register = async (email, password) => {
         try {
             const result = await api.post('/register', { email, password });
+            const token = result.token;
+            localStorage.setItem('token', token);
+            const userData = { email };
+            localStorage.setItem('user', JSON.stringify(userData));
+            setUser(userData);
         } catch (error) {
             console.log("L'utilisateur existe déjà ==> " + error);
             return error;
         }
-        const token = result.token;
-        localStorage.setItem('token', token);
-        const userData = { email };
-        localStorage.setItem('user', JSON.stringify(userData));
-        setUser(userData);
-       
     };
 
     return (

@@ -9,7 +9,7 @@ function Navbar() {
            <Link to="/">Accueil</Link>
            {user ? (
             <>
-                <Link to="/create-article">Créer un article</Link>
+                <Link to="/create">Créer un article</Link>
                 <Link to="/my-articles">Mes articles</Link>
                 <button onClick={logout}>Déconnexion</button>
             </>
